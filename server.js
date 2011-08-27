@@ -21,6 +21,8 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
+var nko = require('nko')('yourteamsecret');
+
 // Session store
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore;
