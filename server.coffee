@@ -33,7 +33,7 @@ assetsSettings =
 		'route'          : /\/static\/js\/[a-z0-9]+\/.*\.js/
 		'path'           : './public/js/'
 		'dataType'       : 'javascript'
-		'files'          : [ 'jquery-latest.js', siteConf.uri + '/socket.io/socket.io.js', 'clientside.js', 'home.js' ] # 'youtube.js' ]
+		'files'          : [ 'jquery-latest.js', siteConf.uri + '/socket.io/socket.io.js', 'utils.js', 'home.js' ] # 'youtube.js' ]
 		'debug'          : true
 		'postManipulate' :
 			'^': [ assetHandler.uglifyJsOptimize, (file, path, index, isLast, callback) ->
