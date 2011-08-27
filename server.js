@@ -32,7 +32,7 @@ var app = module.exports = express.createServer();
 app.listen(siteConf.port, null);
 
 // Setup socket.io server
-var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
+var socketIo = new require('./lib/socket-server.js')(app, sessionStore);
 var authentication = new require('./lib/authentication.js')(app, siteConf);
 // Setup groups for CSS / JS assets
 var assetsSettings = {
@@ -43,6 +43,7 @@ var assetsSettings = {
 		, 'files': [
 			'http://code.jquery.com/jquery-latest.js'
 			, siteConf.uri+'/socket.io/socket.io.js' // special case since the socket.io module serves its own js
+      , 'clientside.js'
       , 'youtube.js'
 		]
 		, 'debug': true
@@ -61,6 +62,7 @@ var assetsSettings = {
 		, 'dataType': 'css'
 		, 'files': [
       'bootstrap-1.1.1.min.css'
+      , 'client.css'
 		]
 		, 'debug': true
 		, 'postManipulate': {
@@ -171,8 +173,14 @@ function NotFound(msg){
 	Error.captureStackTrace(this, arguments.callee);
 }
 
-// Routing
-app.all('/', function(req, res) {
+app.get('/username/:name', function(req,res) {
+  if (req.session) {
+    req.session.user = {name: req.params.name};
+  }
+  res.send(req.session);
+});
+
+app.all('/beta', function(req, res) {
 	// Set example session uid for use with socket.io.
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
@@ -181,6 +189,10 @@ app.all('/', function(req, res) {
 		'key': 'value'
 	});
 	res.render('index');
+});
+
+app.all('/', function(req, res) {
+  res.render('landing', {layout: 'plain'});
 });
 
 // Initiate this after all other routing is done, otherwise wildcard will go crazy.
