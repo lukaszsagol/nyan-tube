@@ -1,0 +1,10 @@
+!!! 5
+html
+  head
+    title nyan tube
+    meta(charset='utf-8')
+    link(rel='stylesheet', href='/static/css/#{assetsCacheHashes.css || 0}/style.css', type='text/css')
+  body
+    .container
+      != body
+    script(src='static/js/#{assetsCacheHashes.js || 0}/client.js', type='text/javascript)

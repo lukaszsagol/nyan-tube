@@ -1,0 +1,15 @@
+.row
+  .span16.columns
+    h1 nyan tube
+.row
+  .span3.columns
+    br
+  .span10.columns
+    form#main_form(action='/rooms/new', method='post')
+      label(for='youtube_id') Youtube ID:
+      .input
+        input(type='text', name='youtube_id')
+        input(type='hidden', name='csrf', value=csrf)
+        button.btn.primary Watch
+  .span3.columns
+    br
