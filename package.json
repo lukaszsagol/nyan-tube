@@ -11,12 +11,16 @@
     "connect-assetmanager-handlers" : ">=0.0.17",
     "ejs" : ">=0.4.3",
     "express" : ">=2.4.3",
-    "socket.io" : ">=0.7.8",
+    "socket.io" : ">=0.7.10",
+		"redis": ">=0.0.1",
     "connect-redis" : ">=1.0.7",
     "connect-notifo" : ">=0.0.1",
     "airbrake" : ">=0.2.0",
     "everyauth" : ">=0.2.18",
     "nodemon" : ">=0.5.3",
-    "nko" : ">=0.1.0"
+    "nko" : ">=0.1.0",
+		"coffee-script" : ">= 0.0.1",
+		"express-csrf" : ">= 0.0.1",
+    "jade": ">= 0.0.1"
   }
 }
