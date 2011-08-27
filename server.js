@@ -14,6 +14,8 @@ process.addListener('uncaughtException', function (err, stack) {
 	if (airbrake) { airbrake.notify(err); }
 });
 
+var http = require('http');
+var nko = require('nko')('pQf4QyGm9TZP5LGu');
 var connect = require('connect');
 var express = require('express');
 var assetManager = require('connect-assetmanager');
@@ -21,7 +23,6 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
-var nko = require('nko')('yourteamsecret');
 
 // Session store
 var RedisStore = require('connect-redis')(express);
