@@ -8,6 +8,7 @@ nyan = null;
     player:     null,
     master:     null,
     player_loading: null,
+    maxDelta: 2,
 
     prepareRoom: function(roomData, youtubeUrl) {
       console.log('prepareRoom');
@@ -142,7 +143,7 @@ nyan = null;
                 nyan.player.pauseVideo();
               }
             }
-            if (Math.abs(syncData.currentTime - nyan.player.getCurrentTime()) > 2) {
+            if (Math.abs(syncData.currentTime - nyan.player.getCurrentTime()) > nyan.maxDelta) {
               nyan.player.seekTo(syncData.currentTime);
             }
           }
