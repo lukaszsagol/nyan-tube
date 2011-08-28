@@ -65,12 +65,10 @@ module.exports = (express, sessions) ->
         redisClient.srem 'room_ids', room
         redisClient.del room+'_names'
       else
-        console.log 'DISCONNECTED '+client.id
         if client.master
           i = 0
           nextMaster = io.sockets.clients(room)[i]
           while (nextMaster.id == client.id)
-            console.log(nextMaster.id + ' cant be master')
             i++
             nextMaster = io.sockets.clients(room)[i]
 
@@ -82,4 +80,3 @@ module.exports = (express, sessions) ->
         io.sockets.in(room).emit('server', client.name + ' left the room.')
 
   io.sockets.on 'error', () ->
-    console.log 'ERROR ' + arguments

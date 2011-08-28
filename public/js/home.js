@@ -13,7 +13,6 @@ nyan = null;
     synchronize: true,
 
     prepareRoom: function(roomData, youtubeUrl) {
-      console.log('prepareRoom');
       var ytId = nyan.parseYoutubeId(youtubeUrl);
 
       if (ytId) {
@@ -75,7 +74,6 @@ nyan = null;
     },
 
     parseYoutubeId: function(url) {
-      console.log('parseYoutubeId');
       var re = /https?:\/\/(?:www\.)?(?:youtu\.be\/|youtube\.com\S*[^\w\-\s])([\w\-]{11})(?=[^\w\-]|$)(?![?=&+%\w]*(?:[\'"][^<>]*>|<\/a>))[?=&+%\w]*/ig;
       var response = url.replace(re, '$1');
       if (response == url) {
@@ -86,17 +84,14 @@ nyan = null;
     },
 
     connectToSocket: function() {
-      console.log('connectToSocket');
       var socket = io.connect(null, { port: '#socketIoPort#', rememberTransport: true, transports: ['websocket', 'flashsocket', 'xhr-multipart', 'xhr-polling'] });
 
       socket.on('connect', function() {
         var master = !!(nyan.roomId && nyan.youtubeId);
         socket.emit('room', { roomId: nyan.roomId, master: master });
-        console.log('Connected');
       });
 
       socket.on('room', function(isMaster) {
-        console.log('Room: ' + isMaster);
         nyan.master = isMaster;
 
         if (nyan.youtubeId) {
@@ -291,7 +286,6 @@ nyan = null;
 
   $('#main_form').submit(function(event) {
     event.preventDefault();
-    console.log('form submit');
 
     var form = $(this);
     var youtubeUrl = $('#youtube_id', form).val();
@@ -306,13 +300,11 @@ nyan = null;
   });
 
   $('.submit_form').live('click', function(event) {
-    console.log('submit_form');
     event.preventDefault();
     $('#main_form').submit();
   });
 
   if (window.roomId) {
-    console.log('join room');
     nyan.joinRoom();
   }
 
