@@ -17,10 +17,8 @@ module.exports = (express, sessions) ->
       ack(err, err ? false : true)
   io.sockets.on 'connection', (client) ->
     user = if client.handshake.session.user then clien.handshake.session.user.name else (client.handshake.session.uid or 'none')
-    master = true
     id = client.id
     room = null
-    name = ''
 
     client.on 'room', (roomData) ->
       room = roomData.roomId
@@ -28,28 +26,30 @@ module.exports = (express, sessions) ->
       clientsCount = io.sockets.clients(room).length
       
       if clientsCount == 1
-        master = roomData.master
+        client.master = roomData.master
       else
-        master = false
+        client.master = false
     
-      client.emit 'room', master
+      client.emit 'room', client.master
     client.on 'chatName', (newName) ->
       tempName = sanitizer.escape(newName)
       redisClient.sismember room+'_names', tempName, (err, val) ->
         if (val == 1)
           client.emit 'chatName', false, tempName
         else
-          name = tempName
+          client.name = tempName
           redisClient.sadd room+'_names', tempName
           client.emit 'chatName', true, tempName
           io.sockets.in(room).emit('server', tempName + ' joined the room.')
 
 
     client.on 'chat', (timestamp, msg) ->
-      io.sockets.in(room).emit('chat', name, timestamp, sanitizer.escape(msg), master) if name != ''
+      io.sockets.in(room).emit('chat', client.name, timestamp, sanitizer.escape(msg), client.master) if client.name != ''
 
     client.on 'videoState', (videoState) ->
-      io.sockets.in(room).volatile.emit('videoState', videoState) if master
+      if client.master
+        io.sockets.in(room).volatile.emit('videoState', videoState)
+        client.youtubeId = videoState.youtubeId unless client.youtubeId
 
     client.on 'disconnect', () ->
       clientsCount = io.sockets.clients(room).length
@@ -57,14 +57,21 @@ module.exports = (express, sessions) ->
         redisClient.srem 'room_ids', room
         redisClient.del room+'_names'
       else
-        if master
-          console.log 'WE NEED MASTER!'
-          io.sockets.in(room).emit('server', 'No master in room. Synchronization disabled')
-        #if master
-        # true
+        console.log 'DISCONNECTED '+client.id
+        if client.master
+          i = 0
+          nextMaster = io.sockets.clients(room)[i]
+          while (nextMaster.id == client.id)
+            console.log(nextMaster.id + ' cant be master')
+            i++
+            nextMaster = io.sockets.clients(room)[i]
 
-      if name
-        io.sockets.in(room).emit('server', name + ' left the room.')
+          nextMaster.master = true
+          nextMaster.emit('newMaster')
+          io.sockets.clients(room).emit('server', nextMaster.name + ' is the new master.')
+
+      if client.name
+        io.sockets.in(room).emit('server', client.name + ' left the room.')
 
   io.sockets.on 'error', () ->
     console.log 'ERROR ' + arguments

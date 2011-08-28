@@ -121,6 +121,24 @@ nyan = null;
           clearInterval(videoStateSender);
         }
 
+        socket.on('newMaster', function() {
+          nyan.master = true
+          videoStateSender = setInterval(function() { 
+            if (nyan.player) {
+              var videoState = {
+                youtubeId: nyan.youtubeId,
+                playerState: nyan.player.getPlayerState(),
+                currentTime: nyan.player.getCurrentTime()
+              };
+
+              socket.emit('videoState', videoState);
+            }
+          }, 500);
+
+          $('#synchronization').css('visibility','hidden');
+          $('#sync_tooltip').css('visibility', 'hidden');
+        });
+
         socket.on('chatName', function(correct, name) {
           if (correct) {
             nyan.name = name;
@@ -297,6 +315,9 @@ nyan = null;
     console.log('join room');
     nyan.joinRoom();
   }
+
+  setTimeout(function() { $('.alert-message').fadeOut(); }, 3000);
+  $('.close').click(function() { $(this).parent().fadeOut(); });
 })(jQuery);
 
 function onYouTubePlayerReady(playerId) {
