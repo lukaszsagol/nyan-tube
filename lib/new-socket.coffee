@@ -45,7 +45,7 @@ module.exports = (express, sessions) ->
 
 
     client.on 'chat', (timestamp, msg) ->
-      io.sockets.in(room).emit('chat', name, timestamp, msg) if name != ''
+      io.sockets.in(room).emit('chat', name, timestamp, msg, master) if name != ''
 
     client.on 'videoState', (videoState) ->
       io.sockets.in(room).volatile.emit('videoState', videoState) if master

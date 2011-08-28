@@ -164,11 +164,14 @@ nyan = null;
         $('#chat').scrollTop($('#chat')[0].scrollHeight);
       });
 
-      socket.on('chat', function(user, timestamp, msg) {
+      socket.on('chat', function(user, timestamp, msg, master) {
         var html = '';
         var class = '';
         if (nyan.name == user) {
           class = 'own'
+        }
+        if (master) {
+          class += ' master'
         }
         html += '<dt class="'+class+'"><span class="name">'+user+'</span>';
         var display_timestamp = nyan.timestampToDisplay(timestamp);

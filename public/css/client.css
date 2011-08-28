@@ -138,7 +138,7 @@
   background: #eee;
 }
 
-#chat dt.own {
+#chat dt.master .name {
   color: darkred;
 }
 
