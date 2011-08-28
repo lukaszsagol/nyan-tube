@@ -60,7 +60,15 @@
 }
 
 #yt_preview {
+  position: relative;
   min-height: 35px;
+}
+
+#join_room {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 14px 24px;
 }
 
 #yt_preview a.image_link {
@@ -202,11 +210,15 @@
   font-size: 14px;
   font-weight: bold;
   margin: 0;
-  margin-right: 14px;
 }
 
 .url input {
-  width: 225px;
+  width: 220px;
+  margin: 0 0 0 10px;
+}
+
+#synchronization.disabled img {
+  opacity: 0.3
 }
 
 
