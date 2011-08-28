@@ -1,15 +1,15 @@
-- if (flash)
-  - for (var type in flash)
-    .alert-message(class=type)
-      a.close(href='#') x
-      p
-        != flash[type]
-  
 #home
   #middle
     .container
       .row
         .span16.columns
+          - if (flash)
+            - for (var type in flash)
+              .alert-message(class=type)
+                a.close(href='#') x
+                p
+                  != flash[type]
+
           &nbsp;
       .row
         form#main_form(action='/rooms/new', method='post')
@@ -26,17 +26,37 @@
   #bottom
     .container
       .row
-        .span4.columns
-          &nbsp;
-        .span8.columns
-          h2 What is it?
+        .span8.columns.offset4.faq
+          h2 What is <b>nyanTube</b>?
           p
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-          h2 What for?
+            | <b>nyanTube</b> is a synchronized YouTube video player. It was created so you
+            | can watch <a href="http://www.youtube.com/results?search_query=kittens&aq=f">kittens</a>
+            | with your friends, laughing together. Or watch videos from the 
+            | <a href="http://www.youtube.com/results?search_query=Live+At+Reading+2011&aq=f">festival</a>
+            | you visited this year, chatting about artist. Endless possibilities, at your fingertips... 
+
+          h2 How to use <b>nyanTube</b>?
           p
-            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-          a(href='#topbar') Ok, take me back to the top.
-        .span3.columns
-          &nbsp;
+            | Using <b>nyanTube</b> is as easy as pasting (or typing, if you wish) YouTube URL in the huge
+            | bar above, pressing enter, and sending URL to room from the field above the chat to your friends. Nothing more,
+            | nothing less.
+          p
+            | Person who created room has full control over what other room participants see (playing, pausing, scrolling
+            | through video). At the same time, every participant can turn off synchronization for a while.
+          p
+            | On the right hand side you can see chat, which you can join by typing your name. Every message sent
+            | in it has special time tag, connected to moment in video. If you want to see what your friends commented on,
+            | just turn off synchronization using the button above the player, and then click on thoe time tags.
+
+          h2 About nyanTube
+          p
+            | <b>nyanTube</b> was created during Node Knockout - 48h node.js programming contest. If you
+            | like the idea, you can vote using button at the <a href="#topbar">top bar</a>. You can also
+            | share it to your friends on Twitter or Facebook - you know where to look for buttons.
+          p
+            | In case you want to contact me, you can find me on twitter <a href="http://twitter.com/zgryw">@zgryw</a>
+            | or just write plain old email to lukasz at sagol.pl.
+          p
+            | Icons used are from <a href="http://blog.twg.ca/2010/11/retina-display-icon-set/">Retina Display Icon Set</a> by <a href="http://twg.ca">twg.ca</a>.
 
 != partial('room', {roomId: null})

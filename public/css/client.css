@@ -221,4 +221,12 @@
   opacity: 0.3
 }
 
+.faq p {
+  margin: 13px 0;
+  font-size: 14px;
+}
+
+.faq h2 {
+   margin: 12px 0;
+}
 
