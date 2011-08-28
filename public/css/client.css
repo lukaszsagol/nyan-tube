@@ -1,3 +1,46 @@
+#topbar {
+  height: 60px;
+  background: #353535;
+}
+
+#topbar a {
+  color: #ebebeb;
+}
+
+#topbar h1 {
+  padding-top: 10px;
+}
+
+#middle {
+  background: #424242;
+}
+
+#middle .loading {
+  background: url('/img/middle-loader.gif') no-repeat 50% 50%;
+}
+
+#middle .full_loading {
+  background: url('/img/middle-loader.gif') no-repeat 50% 50%;
+}
+
+#middle .full_loading * {
+  visibility: hidden;
+}
+
+#home #middle label {
+  color: #ebebeb;
+  font-size: 20px;
+  width: auto;
+  padding-top: 15px;
+}
+
+#youtube_id {
+  font-size: 30px;
+  width: 100%;
+  height: 40px;
+  background: #eee;
+}
+
 .around {
 	border: 1px solid #CCCCCC;
 	border-radius: 6px 6px 6px 6px;
@@ -14,17 +57,132 @@
   display: none;
 }
 
+#yt_preview {
+  min-height: 35px;
+}
+
+#yt_preview a.image_link {
+  display: inline-block;
+}
+
+#yt_preview .image_link img {
+  width: 200px;
+}
+
+#yt_preview h2 {
+  display: inline-block;
+  width: 485px;
+  vertical-align: top;
+  padding-left: 15px;
+}
+
+#yt_preview h2 a {
+  color: #ebebeb;
+}
+
+#yt_preview.loading {
+  background: url('/img/middle-loader.gif') no-repeat 0 0;
+}
+
+.chat_loading {
+  background: url('/img/chat-loader.gif') no-repeat 50% 50%;
+  width: 20px;
+  height: 11px;
+  padding: 0 5px;
+  display: inline-block;
+}
+
+#chatbox {
+  position: relative;
+}
+
 #chat {
-	padding: 0;
-	margin: 0;
-	list-style-type: none;
+  width: 100%;
+  height: 450px;
+  background: #dddcdc;
+  padding: 0;
+  margin: 0;
 }
 
-#chat li {
-	padding: 4px;
-	border-bottom: 1px solid #eee;
+#chat {
+  font-size: 13px;
 }
 
-#chat li.server {
-	background: #eee;
+#chat_input {
+  width: 265px;
+  margin-right: 4px;
 }
+
+#chat dt {
+  margin: 0;
+  padding: 5px 5px 0 5px;
+}
+
+#chat dt span {
+  display: inline-block;
+}
+
+#chat dt .timestamp a {
+  font-size: 11px;
+  color: #999;
+  padding-left: 10px;
+}
+
+#chat dt .datetime {
+  float: right;
+}
+
+#chat dd {
+  color: #000;
+}
+
+#chat dd {
+  margin: 0;
+  padding: 0 5px 5px 5px;
+}
+
+#login_to_chat {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#login_to_chat p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+
+#login_to_chat input {
+  width: 160px;
+  margin-bottom: 10px;
+}
+
+#login_to_chat .inner {
+  text-align: center;
+  padding-top: 200px;
+}
+
+#login_to_chat .error {
+  color: #9D261D;
+  font-size: 11px;
+  margin: 0;
+}
+
+.url p {
+  display: inline-block;
+  color: #ebebeb;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  margin-right: 14px;
+}
+
+.url input {
+  width: 225px;
+}
+
+

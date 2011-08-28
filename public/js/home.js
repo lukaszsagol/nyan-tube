@@ -19,6 +19,7 @@ nyan = null;
 
         $('#home').hide();
         $('#room').show();
+        $('#url').val('http://nyan.no.de/r/'+nyan.roomId);
 
         nyan.connectToSocket();
       } else {
@@ -30,8 +31,34 @@ nyan = null;
       nyan.roomId = roomId;
       
       $('#room').show();
+      $('#url').val('http://nyan.no.de/r/'+nyan.roomId);
 
       nyan.connectToSocket();
+    },
+
+    timestampToDisplay: function(secs) {
+      var hours = Math.floor(secs / (60 * 60));
+      var divisor_for_minutes = secs % (60 * 60);
+      var minutes = Math.floor(divisor_for_minutes / 60);
+      var divisor_for_seconds = divisor_for_minutes % 60;
+      var seconds = Math.ceil(divisor_for_seconds);
+
+
+      if (minutes.toString().length == 1) {
+        minutes = '0'+minutes;
+      }
+
+      if (seconds.toString().length == 1) {
+        seconds = '0'+seconds;
+      }
+
+      var result = '';
+      if (hours > 0) {
+        result += hours + ':';
+      }
+      result += minutes+':'+seconds;
+
+      return result;
     },
 
     parseYoutubeId: function(url) {
@@ -59,12 +86,11 @@ nyan = null;
         console.log('Room: ' + isMaster);
         nyan.master = isMaster;
 
-
         if (nyan.youtubeId) {
           nyan.loadYoutubePlayer();
         }
 
-        $('.chat_inputs').removeAttr('disabled');
+        $('#chatbox').removeClass('full_loading');
 
         videoStateSender = setInterval(function() { 
           if (nyan.player) {
@@ -81,6 +107,28 @@ nyan = null;
         if (!nyan.master) {
           clearInterval(videoStateSender);
         }
+
+        socket.on('chatName', function(correct, name) {
+          if (correct) {
+            nyan.name = name;
+            $('#login_to_chat').remove();
+            $('.chat_inputs').removeAttr('disabled');
+          } else {
+            $('#chat_login_loading').hide();
+            $('#login_to_chat .error').text('Name already taken.');
+            $('#chat_name_send').removeAttr('disabled');
+          }
+        });
+
+        $('#chat_name_send').click(function() {
+          var name = $('#chat_name').val();
+
+          if (name != '') {
+            $(this).attr('disabled', 'disabled');
+            $('#chat_login_loading').show();
+            socket.emit('chatName', name);
+          }
+        });
       });
 
       socket.on('videoState', function(syncData) {
@@ -107,15 +155,23 @@ nyan = null;
       });
 
 
-      socket.on('chat', function(user, msg) {
-        console.log(user+': '+msg);
+      socket.on('chat', function(user, timestamp, msg) {
+        var html = ''
+        html += '<dt><span class="name">'+user+'</span>';
+        var display_timestamp = nyan.timestampToDisplay(timestamp);
+        html += '<span class="timestamp"><a href="#" onclick="nyan.goToTime(\''+timestamp+'\')">['+display_timestamp+']</a></span>';
+        var datetime = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
+        html += '<span class="datetime">'+datetime+'</span></dt>';
+        html += '<dd>'+msg+'</dd>';
+        $('#chat').append(html);
       });
 
 
       $('#chat_send').click(function() {
         var text = $('#chat_input').val();
         if (text != '') {
-          socket.emit('chat', text);
+          var time = parseInt(nyan.player.getCurrentTime());
+          socket.emit('chat', time, text);
           $('#chat_input').val('');
         }
       });
@@ -133,15 +189,41 @@ nyan = null;
       var params = { allowScriptAccess: "always" };
       var attrs = { id: "ytPlayer" };
       //swfobject.embedSWF("http://www.youtube.com/apiplayer?version=3&enablejsapi=1&playerapiid=player1", "player", "560", "480", "9", "/swf/expressInstall.swf", null, params, attrs);
-      swfobject.embedSWF("http://www.youtube.com/e/"+nyan.youtubeId+"?version=3&enablejsapi=1", "player", "560", "480", "9", "/swf/expressInstall.swf", null, params, attrs);
+      swfobject.embedSWF("http://www.youtube.com/e/"+nyan.youtubeId+"?version=3&enablejsapi=1", "player", "580", "480", "9", "/swf/expressInstall.swf", null, params, attrs);
     },
 
     playerLoaded: function() {
     },
   };
 
+
+  $('#youtube_id').bind('keyup paste', function(e) {
+    setTimeout(function() { loadYoutubePreview(); }, 10);
+  });
+
+  function loadYoutubePreview() {
+    var ytPreview = $('#yt_preview');
+    if (!ytPreview.hasClass('loading')) {
+      ytPreview.addClass('loading');
+      $.ajax({
+        type: 'POST',
+        url: '/oembed',
+        data: $('#main_form').serialize(),
+        success: function(ytData) {
+          ytPreview.removeClass('loading');
+          ytPreview.empty();
+          if (ytData.status == 'OK') {
+            ytPreview.append('<a class="image_link submit_form" href="#"><img src='+ytData.data.thumbnail_url+' /></a>');
+            ytPreview.append('<h2><a class="submit_form" href="#">'+ytData.data.title+'</a></h2>');
+          }
+        }
+      })
+    }
+  }
+
   $('#main_form').submit(function(event) {
     event.preventDefault();
+    console.log('form submit');
 
     var form = $(this);
     var youtubeUrl = $('#youtube_id', form).val();
@@ -155,7 +237,14 @@ nyan = null;
     });
   });
 
-  if (roomId) {
+  $('.submit_form').live('click', function(event) {
+    console.log('submit_form');
+    event.preventDefault();
+    $('#main_form').submit();
+  });
+
+  if (window.roomId) {
+    console.log('join room');
     nyan.joinRoom();
   }
 })(jQuery);

@@ -1,16 +1,26 @@
 - if (roomId)
   script var roomId = '#{roomId}';
+
 #room
-  .row
-    .span16.columns
-      h1#yt
-      h2#url
-  .row
-    .span10.columns
-      .around
-        #player
-    .span6.columns
-      .around
-        ul#chat.scrolling
-        input.chat_inputs#chat_input(type='text', disabled='disabled')
-        button.btn.primary.chat_inputs#chat_send(disabled='disabled') Send
+  #middle
+    .container
+      .row
+        .span6.columns.offset10
+          .url
+            p URL to share:
+            input#url(type='text')
+      .row
+        .span10.columns
+          #player.loading(style='width: 580px; height: 460px')
+        .span6.columns
+          #chatbox.full_loading
+            #login_to_chat
+              .inner
+                p Type your name to join chat:
+                input#chat_name(type='text')
+                p.error
+                button.btn.primary#chat_name_send Log in
+                #chat_login_loading.chat_loading(style = 'display: none')
+            dl#chat.scrolling
+            input.chat_inputs#chat_input(type='text', disabled='disabled')
+            button.btn.primary.chat_inputs#chat_send(disabled='disabled') Send

@@ -5,6 +5,19 @@ html
     meta(charset='utf-8')
     link(rel='stylesheet', href='/static/css/#{assetsCacheHashes.css || 0}/style.css', type='text/css')
   body
-    .container
-      != body
+    #topbar
+      .container
+        .row
+          .span3.columns
+            h1
+              a(href='/home') nyantube
+          .span11.columns
+            &nbsp;
+          .span2.columns
+            div(style='padding-top: 5px;')
+              <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nyan.no.de/" data-text="I'm watching YouTube videos with my friends on #nyanTube" data-count="horizontal" data-via="zgryw">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+              iframe(scrolling='no', frameborder='0', style='border: none; overflow: hidden; width: 300px; height: 21px;', allowTransparency='true', src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fnyan.no.de%2F&amp;send=false&amp;layout=button_count&amp;width=300&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21")
+
+
+    != body
     script(src='static/js/#{assetsCacheHashes.js || 0}/client.js', type='text/javascript)
