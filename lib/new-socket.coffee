@@ -31,6 +31,7 @@ module.exports = (express, sessions) ->
         client.master = false
     
       client.emit 'room', client.master
+
     client.on 'chatName', (newName) ->
       tempName = sanitizer.escape(newName)
       redisClient.sismember room+'_names', tempName, (err, val) ->
@@ -40,11 +41,13 @@ module.exports = (express, sessions) ->
           client.name = tempName
           redisClient.sadd room+'_names', tempName
           client.emit 'chatName', true, tempName
-        
-          clients = []
-          clients += (if io.sockets.clients(room)[i].name then io.sockets.clients(room)[i].name + ', ' else '') for i in [0...io.sockets.clients(room).length]
 
-          client.emit 'server', 'People in room: ['+clients.toString() +']'
+          clientList = []
+          clientList += (if io.sockets.clients(room)[i].name then io.sockets.clients(room)[i].name + ', ' else '') for i in [0...io.sockets.clients(room).length]
+          clientList = clientList.toString()
+          msg = 'People in room: ' + clientList
+
+          client.emit('server', msg)
           io.sockets.in(room).emit('server', tempName + ' joined the room.')
 
 
