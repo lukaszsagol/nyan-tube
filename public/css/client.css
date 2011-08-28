@@ -10,6 +10,10 @@
 	overflow-y: scroll;
 }
 
+#room {
+  display: none;
+}
+
 #chat {
 	padding: 0;
 	margin: 0;

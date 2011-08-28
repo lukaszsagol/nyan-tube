@@ -1,0 +1,16 @@
+- if (roomId)
+  script var roomId = '#{roomId}';
+#room
+  .row
+    .span16.columns
+      h1#yt
+      h2#url
+  .row
+    .span10.columns
+      .around
+        #player
+    .span6.columns
+      .around
+        ul#chat.scrolling
+        input.chat_inputs#chat_input(type='text', disabled='disabled')
+        button.btn.primary.chat_inputs#chat_send(disabled='disabled') Send

@@ -102,12 +102,20 @@ NotFound = (msg) ->
 rooms = require('./lib/rooms.coffee')(redisClient)
 
 # Real routing
+app.get '/r/:rid', (req, res) ->
+  roomId = req.params.rid
+  redisClient.sismember 'room_ids', roomId, (err, val) ->
+    if val == 1
+      res.render 'room.jade', { roomId: roomId }
+    else
+      res.render 'home.jade', { flash: { error: '<b>Oh noes!</b> That room doesn\'t exist :(' }}
+
 app.post '/rooms/new', (req, res) ->
 	rooms.generateRandomId (id) ->
-		res.json { room_id: id }
+		res.json { roomId: id }
 
 app.get '/home', (req, res) ->
-	res.render 'home.jade'
+  res.render 'home.jade', { flash: null }
 
 app.all '/', (req, res) ->
 	res.render 'landing', { layout: 'plain' }

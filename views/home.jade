@@ -1,15 +1,25 @@
-.row
-  .span16.columns
-    h1 nyan tube
-.row
-  .span3.columns
-    br
-  .span10.columns
-    form#main_form(action='/rooms/new', method='post')
-      label(for='youtube_id') Youtube ID:
-      .input
-        input(type='text', name='youtube_id')
-        input(type='hidden', name='csrf', value=csrf)
-        button.btn.primary Watch
-  .span3.columns
-    br
+- if (flash)
+  - for (var type in flash)
+    .alert-message(class=type)
+      a.close(href='#') x
+      p
+        != flash[type]
+  
+#home
+  .row
+    .span16.columns
+      h1 nyan tube
+  .row
+    .span3.columns
+      br
+    .span10.columns
+      form#main_form(action='/rooms/new', method='post')
+        label(for='youtube_id') Youtube ID:
+        .input
+          input#youtube_id(type='text', name='youtube_id')
+          input(type='hidden', name='csrf', value=csrf)
+          button.btn.primary Watch
+    .span3.columns
+      br
+
+!= partial('room', {roomId: null})
