@@ -56,7 +56,15 @@ module.exports = (express, sessions) ->
       if clientsCount == 1
         redisClient.srem 'room_ids', room
         redisClient.del room+'_names'
-      io.sockets.in(room).emit('server', name + ' left the room.')
+      else
+        if master
+          console.log 'WE NEED MASTER!'
+          io.sockets.in(room).emit('server', 'No master in room. Synchronization disabled')
+        #if master
+        # true
+
+      if name
+        io.sockets.in(room).emit('server', name + ' left the room.')
 
   io.sockets.on 'error', () ->
     console.log 'ERROR ' + arguments
