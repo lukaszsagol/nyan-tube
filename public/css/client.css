@@ -3,8 +3,10 @@
   background: #353535;
 }
 
-#topbar a {
+#topbar h1 a {
   color: #ebebeb;
+  font-family: 'Hammersmith One', Arial;
+  text-decoration: none;
 }
 
 #topbar h1 {
