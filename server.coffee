@@ -72,8 +72,8 @@ app.configure () ->
         callback(null, (!req.xhr && !(req.headers['x-real-ip'] || req.connection.remoteAddress).match(/192.168./)))
       format: (req, res, callback) ->
         callback(null, {
-          title: ':req[x-real-ip]/:remote-addr @ :req[host]'
-          message: ':response-time ms - :date - :req[x-real-ip]/:remote-addr - :method :user-agent / :referrer'
+          title: ':method :url @ :req[host]'
+          message: ':method :url [:response-time ms] (Referrer :referrer) || :date || :user-agent'
         })
     }))
 
