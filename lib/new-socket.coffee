@@ -68,7 +68,7 @@ module.exports = (express, sessions) ->
 
           nextMaster.master = true
           nextMaster.emit('newMaster')
-          io.sockets.clients(room).emit('server', nextMaster.name + ' is the new master.')
+          io.sockets.in(room).emit('server', nextMaster.name + ' is the new master.')
 
       if client.name
         io.sockets.in(room).emit('server', client.name + ' left the room.')
