@@ -4,8 +4,18 @@
 #room
   #middle
     .container
+      .row(style='height:0;')
+        .span1.columns.offset15
+          br
       .row
-        .span6.columns.offset10
+        .span5.columns(style='position: relative;')
+          a#synchronization(href='#')
+            img(src='/img/synchro.png')
+          #sync_tooltip.twipsy.right(style='top: -5px; left: 30px')
+            .twipsy-arrow
+            .twipsy-inner
+              | You can toggle video synchronization.
+        .span6.columns.offset5
           .url
             p URL to share:
             input#url(type='text')

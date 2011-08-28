@@ -10,6 +10,7 @@ nyan = null;
     player_loading: null,
     maxDelta: 2,
     name: null,
+    synchronize: true,
 
     prepareRoom: function(roomData, youtubeUrl) {
       console.log('prepareRoom');
@@ -22,6 +23,8 @@ nyan = null;
         $('#home').hide();
         $('#room').show();
         $('#url').val('http://nyan.no.de/r/'+nyan.roomId);
+        $('#synchronization').css('visibility', 'hidden');
+        $('#sync_tooltip').css('visibility', 'hidden');
 
         nyan.connectToSocket();
       } else {
@@ -36,6 +39,10 @@ nyan = null;
       $('#url').val('http://nyan.no.de/r/'+nyan.roomId);
 
       nyan.connectToSocket();
+    },
+
+    goToTime: function(time) {
+      nyan.player.seekTo(time);
     },
 
     timestampToDisplay: function(secs) {
@@ -61,6 +68,10 @@ nyan = null;
       result += minutes+':'+seconds;
 
       return result;
+    },
+
+    toggleSynchronization: function() {
+      return (nyan.synchronize = !!!nyan.synchronize);
     },
 
     parseYoutubeId: function(url) {
@@ -122,6 +133,27 @@ nyan = null;
           }
         });
 
+
+        $('#synchronization').hover(function(e) {
+          $('#sync_tooltip').show();
+        }, function(e) {
+          $('#sync_tooltip').hide();
+        });
+
+        $('#synchronization').click(function(e) {
+          if (nyan.toggleSynchronization()) {
+            $(this).removeClass('disabled');
+          } else {
+            $(this).addClass('disabled');
+          }
+        });
+
+        $('#chat_name').keypress(function(e) {
+          if (e.which && e.which == 13) {
+            $('#chat_name_send').click();
+          };
+        });
+
         $('#chat_name_send').click(function() {
           var name = $('#chat_name').val();
 
@@ -135,7 +167,7 @@ nyan = null;
 
       socket.on('videoState', function(syncData) {
         if (nyan.player) {
-          if (!nyan.master) {
+          if (!nyan.master && nyan.synchronize) {
             // update videoId if needed!
             if (nyan.player.getPlayerState() != syncData.playerState) {
               if (syncData.playerState == 1) {
@@ -232,6 +264,7 @@ nyan = null;
           if (ytData.status == 'OK') {
             ytPreview.append('<a class="image_link submit_form" href="#"><img src='+ytData.data.thumbnail_url+' /></a>');
             ytPreview.append('<h2><a class="submit_form" href="#">'+ytData.data.title+'</a></h2>');
+            ytPreview.append('<a class="btn success large submit_form" id="join_room" href="#">I want to watch it!</a>');
           }
         }
       })
