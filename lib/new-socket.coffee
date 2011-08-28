@@ -2,6 +2,7 @@ module.exports = (express, sessions) ->
   parseCookie = require('connect').utils.parseCookie
   io = require('socket.io').listen express
   redisClient = require('redis').createClient()
+  sanitizer = require('sanitizer')
 
   io.configure ->
     io.set 'log level', 0
@@ -33,19 +34,19 @@ module.exports = (express, sessions) ->
     
       client.emit 'room', master
     client.on 'chatName', (newName) ->
-      name = newName
-      # check if name is taken
-      redisClient.sismember room+'_names', name, (err, val) ->
+      tempName = sanitizer.escape(newName)
+      redisClient.sismember room+'_names', tempName, (err, val) ->
         if (val == 1)
-          client.emit 'chatName', false, name
+          client.emit 'chatName', false, tempName
         else
-          redisClient.sadd room+'_names', name
-          client.emit 'chatName', true, name
-          io.sockets.in(room).emit('server', name + ' joined the room.')
+          name = tempName
+          redisClient.sadd room+'_names', tempName
+          client.emit 'chatName', true, tempName
+          io.sockets.in(room).emit('server', tempName + ' joined the room.')
 
 
     client.on 'chat', (timestamp, msg) ->
-      io.sockets.in(room).emit('chat', name, timestamp, msg, master) if name != ''
+      io.sockets.in(room).emit('chat', name, timestamp, sanitizer.escape(msg), master) if name != ''
 
     client.on 'videoState', (videoState) ->
       io.sockets.in(room).volatile.emit('videoState', videoState) if master

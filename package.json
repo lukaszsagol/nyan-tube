@@ -22,6 +22,7 @@
     "nko" : ">=0.1.0",
 		"coffee-script" : ">= 0.0.1",
 		"express-csrf" : ">= 0.0.1",
-    "jade": ">= 0.0.1"
+    "jade": ">= 0.0.1",
+    "sanitizer": ">= 0.0.1"
   }
 }
