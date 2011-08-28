@@ -51,7 +51,7 @@ assetsSettings =
 assetsMiddleware = assetManager(assetsSettings)
 
 app.configure () ->
-	app.set 'view engine', 'ejs'
+	app.set 'view engine', 'jade'
 	app.set 'views', __dirname+'/views'
 
 app.configure () ->
