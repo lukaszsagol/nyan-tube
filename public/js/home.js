@@ -23,7 +23,7 @@ nyan = null;
 
         nyan.connectToSocket();
       } else {
-        alert('bledny URL!');
+        alert('Provided URL is not correct.');
       }
     },
 
@@ -164,6 +164,7 @@ nyan = null;
         html += '<span class="datetime">'+datetime+'</span></dt>';
         html += '<dd>'+msg+'</dd>';
         $('#chat').append(html);
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
       });
 
 
