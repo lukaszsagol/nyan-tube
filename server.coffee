@@ -17,6 +17,7 @@ express      = require('express')
 assetManager = require('connect-assetmanager')
 assetHandler = require('connect-assetmanager-handlers')
 csrf				 = require('express-csrf')
+notifoMiddleware = require('connect-notifo')
 
 RedisStore   = require('connect-redis')(express)
 sessionStore = new RedisStore()
@@ -55,15 +56,27 @@ app.configure () ->
 	app.set 'views', __dirname+'/views'
 
 app.configure () ->
-	app.use express.bodyParser()
-	app.use express.cookieParser()
-	app.use assetsMiddleware
-	app.use express.session({store: sessionStore, secret: siteConf.sessionSecret})
-	app.use express.logger({'format': ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'})
-	app.use authentication.middleware.auth()
-	app.use authentication.middleware.normalizeUserData()
-	app.use express['static'](__dirname+'/public', {'maxAge': 86400000})
-	app.use csrf.check()
+  app.use express.bodyParser()
+  app.use express.cookieParser()
+  app.use assetsMiddleware
+  app.use express.session({store: sessionStore, secret: siteConf.sessionSecret})
+  app.use express.logger({'format': ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'})
+  app.use authentication.middleware.auth()
+  app.use authentication.middleware.normalizeUserData()
+  app.use express['static'](__dirname+'/public', {'maxAge': 86400000})
+  app.use csrf.check()
+
+  if siteConf.notifoAuth
+    app.use(notifoMiddleware(siteConf.notifoAuth, {
+      filter: (req, res, callback) ->
+        callback(null, (!req.xhr && !(req.headers['x-real-ip'] || req.connection.remoteAddress).match(/192.168./)))
+      format: (req, res, callback) ->
+        callback(null, {
+          title: ':req[x-real-ip]/:remote-addr @ :req[host]'
+          message: ':response-time ms - :date - :req[x-real-ip]/:remote-addr - :method :user-agent / :referrer'
+        })
+    }))
+
 
 app.configure 'development', () ->
 	app.use express.errorHandler({'dumpExceptions': true, 'showStack': true})
