@@ -152,7 +152,7 @@ app.get '/home', (req, res) ->
   res.render 'home.jade', { flash: null }
 
 app.all '/', (req, res) ->
-	res.render 'landing.ejs', { layout: 'plain.ejs' }
+  res.render 'home.jade', { flash: null }
 
 app.all '*', (req, res) ->
 	throw new NotFound
