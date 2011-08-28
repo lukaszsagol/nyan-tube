@@ -96,6 +96,7 @@
 
 #chatbox {
   position: relative;
+  background: #dddcdc;
 }
 
 #chat {
@@ -118,6 +119,27 @@
 #chat dt {
   margin: 0;
   padding: 5px 5px 0 5px;
+}
+
+#chat dt.server {
+  display: none;
+}
+
+#chat dd.server {
+  font-size: 12px;
+  margin: 0px;
+  padding: 5px;
+  background: #aaa;
+  color: #444;
+}
+
+#chat dt.own,
+#chat dd.own {
+  background: #eee;
+}
+
+#chat dt.own {
+  color: darkred;
 }
 
 #chat dt span {

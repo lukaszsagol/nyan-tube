@@ -41,19 +41,21 @@ module.exports = (express, sessions) ->
         else
           redisClient.sadd room+'_names', name
           client.emit 'chatName', true, name
+          io.sockets.in(room).emit('server', name + ' joined the room.')
 
 
     client.on 'chat', (timestamp, msg) ->
       io.sockets.in(room).emit('chat', name, timestamp, msg) if name != ''
 
     client.on 'videoState', (videoState) ->
-      io.sockets.in(room).emit('videoState', videoState) if master
+      io.sockets.in(room).volatile.emit('videoState', videoState) if master
 
     client.on 'disconnect', () ->
       clientsCount = io.sockets.clients(room).length
       if clientsCount == 1
         redisClient.srem 'room_ids', room
         redisClient.del room+'_names'
+      io.sockets.in(room).emit('server', name + ' left the room.')
 
   io.sockets.on 'error', () ->
     console.log 'ERROR ' + arguments

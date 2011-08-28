@@ -9,6 +9,7 @@ nyan = null;
     master:     null,
     player_loading: null,
     maxDelta: 2,
+    name: null,
 
     prepareRoom: function(roomData, youtubeUrl) {
       console.log('prepareRoom');
@@ -155,15 +156,26 @@ nyan = null;
         }
       });
 
+      socket.on('server', function(msg) {
+        var html = '';
+        html += '<dt class="server">Server</dt>'
+        html += '<dd class="server">'+msg+'</dd>'
+        $('#chat').append(html);
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+      });
 
       socket.on('chat', function(user, timestamp, msg) {
-        var html = ''
-        html += '<dt><span class="name">'+user+'</span>';
+        var html = '';
+        var class = '';
+        if (nyan.name == user) {
+          class = 'own'
+        }
+        html += '<dt class="'+class+'"><span class="name">'+user+'</span>';
         var display_timestamp = nyan.timestampToDisplay(timestamp);
         html += '<span class="timestamp"><a href="#" onclick="nyan.goToTime(\''+timestamp+'\')">['+display_timestamp+']</a></span>';
         var datetime = new Date().getHours().toString() + ':' + new Date().getMinutes().toString();
         html += '<span class="datetime">'+datetime+'</span></dt>';
-        html += '<dd>'+msg+'</dd>';
+        html += '<dd class="'+class+'">'+msg+'</dd>';
         $('#chat').append(html);
         $('#chat').scrollTop($('#chat')[0].scrollHeight);
       });
