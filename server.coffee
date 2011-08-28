@@ -110,9 +110,30 @@ app.get '/r/:rid', (req, res) ->
     else
       res.render 'home.jade', { flash: { error: '<b>Oh noes!</b> That room doesn\'t exist :(' }}
 
+app.post '/oembed', (req, res) ->
+  url = req.body.youtube_id
+  opts =
+    host: 'www.youtube.com'
+    port: 80
+    path: '/oembed?format=json&url='+encodeURIComponent(url)
+    method: 'GET'
+  
+  proxy = http.request opts, (proxy_res) ->
+    if proxy_res.statusCode == 200
+      proxy_res.on 'data', (chunk) ->
+        res.json { status: 'OK', data: JSON.parse(chunk) }
+    else
+      res.json { status: 'Wrong' }
+
+  proxy.on 'error', (err) ->
+    res.json { status: 'Error' }
+
+  proxy.end()
+
+
 app.post '/rooms/new', (req, res) ->
-	rooms.generateRandomId (id) ->
-		res.json { roomId: id }
+  rooms.generateRandomId (id) ->
+    res.json { roomId: id }
 
 app.get '/home', (req, res) ->
   res.render 'home.jade', { flash: null }
