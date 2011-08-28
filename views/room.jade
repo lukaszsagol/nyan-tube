@@ -34,3 +34,24 @@
             dl#chat.scrolling
             input.chat_inputs#chat_input(type='text', disabled='disabled')
             button.btn.primary.chat_inputs#chat_send(disabled='disabled') Send
+  .container
+    .row
+      .span8.columns.offset4.faq
+        h2 Help
+        p
+          | Person which created room is so called <b>master</b>. He can control
+          | which fragment of video you are currently watching, until you disable synchronization 
+          | (button above player, you can't see it if you are master),
+          | which will allow you to watch whichever moment you want.
+        p
+          | Master in chatroom can be recognized by darkred name in his messages. All your
+          | messages are those with white background, and others... are written by other participants.
+        p
+          | Whenever master disconnects, another master is selected from other persons, and everybody
+          | is informed about it in chatroom.
+        p
+          | Each chat message has little timestamp, right of nicknames. By clicking on it, you can
+          | move to the moment in video, when the message was sent - useful when you want to see
+          | what the person was writting about.
+        p
+          | Questions? Contact me <a href="http://twitter.com/zgryw">@zgryw</a>.
