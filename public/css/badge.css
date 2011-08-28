@@ -1,3 +1,3 @@
 body { color: #ebebeb; }
-#facebook { display: none; }
-#heart { display: block; }
+#button #facebook { display: none; }
+#button #heart { display: block; }
